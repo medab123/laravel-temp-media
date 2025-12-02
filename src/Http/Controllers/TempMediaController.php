@@ -38,6 +38,7 @@ final class TempMediaController extends Controller
             ], ResponseAlias::HTTP_BAD_REQUEST);
 
         } catch (\Throwable $e) {
+            report($e);
             return response()->json([
                 'success' => false,
                 'error' => 'Upload failed',

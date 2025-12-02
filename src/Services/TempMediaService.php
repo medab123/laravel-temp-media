@@ -30,7 +30,6 @@ final class TempMediaService implements TempMediaServiceInterface
             $tempMedia = $this->createTempMedia($file, $sessionId, $ttlHours);
             $mediaItem = $tempMedia
                 ->addMediaFromRequest('file')
-                ->usingName($file->getClientOriginalName())
                 ->toMediaCollection($tempMedia->getCollectionName());
 
             $dto = new TempMediaUploadDTO(

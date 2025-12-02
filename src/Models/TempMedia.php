@@ -52,7 +52,9 @@ class TempMedia extends Model implements HasMedia
         $collectionName = config('temp-media.collection_name', 'temp_files');
         $allowedMimeTypes = config('temp-media.allowed_mime_types', []);
 
-        $collection = $this->addMediaCollection($collectionName)->singleFile();
+        $collection = $this->addMediaCollection($collectionName)
+            ->useDisk(config('temp-media.disk', 'local'))
+            ->singleFile();
 
         if (! empty($allowedMimeTypes)) {
             $collection->acceptsMimeTypes($allowedMimeTypes);
