@@ -8,6 +8,7 @@ use Medox\LaravelTempMedia\Contracts\MediaTransferServiceInterface;
 use Medox\LaravelTempMedia\DTOs\MediaTransferDTO;
 use Medox\LaravelTempMedia\DTOs\TempMediaTransferDTO;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 trait HandlesTempMedia
 {
@@ -48,5 +49,23 @@ trait HandlesTempMedia
             ],
             $transferDto->transferredMedia
         );
+    }
+
+    public function updateOrTransferMedia(array $attachments, string $collection): MediaCollection
+    {
+        $partitioned = collect($attachments)
+            ->map(fn ($image, $i) => [...$image, 'order_column' => $i + 1])
+            ->partition(fn ($image) => $image['is_temporary'] ?? false);
+
+        [$newImages, $existingImages] = $partitioned;
+
+        $this->updateMedia($existingImages->all(), $collection);
+
+        $this->transferTempMedia(
+            TempMediaTransferDTO::fromArray($newImages->all()),
+            $collection
+        );
+
+        return $this->getMedia($collection);
     }
 }
