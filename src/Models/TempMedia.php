@@ -61,24 +61,6 @@ class TempMedia extends Model implements HasMedia
         }
     }
 
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        if (! config('temp-media.generate_conversions', false)) {
-            return;
-        }
-
-        $this->addMediaConversion('thumb')
-            ->width(300)
-            ->height(300)
-            ->sharpen(10)
-            ->nonQueued();
-
-        $this->addMediaConversion('small')
-            ->width(150)
-            ->height(150)
-            ->nonQueued();
-    }
-
     public function isExpired(): bool
     {
         return $this->expires_at->isPast();
