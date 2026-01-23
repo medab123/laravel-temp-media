@@ -26,7 +26,6 @@ final class TempMediaUploadRequest extends FormRequest
             'file' => array_filter([
                 'required',
                 'file',
-                'image',
                 'max:'.($maxSize / 1024),
                 $mimeTypesRule,
             ]),
